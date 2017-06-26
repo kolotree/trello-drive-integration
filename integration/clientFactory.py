@@ -1,4 +1,6 @@
 from integration import authorizeOAuth
+import configparser
+import os
 
 class ClientFactory():
 
@@ -6,15 +8,21 @@ class ClientFactory():
         pass
 
     def getClient(self):
-        client_key = 'ba807f65e19546e12ae15d7032620651'
-        client_secret = 'ce4d3aef857b1442977c06b18672724f72d47ab017ae264dff42e154b8e01888'
-        token = 'a8d52bcbfafa6e015311c4a4f55316bb97d35f6745f967a71817dba24396a0cc'
-        token_secret = '8d62e2cfc08e92df29b7be0589a5fb69'
-        board = 'gOzNH8uG'
-        list = None
+        """
+        Method will always return new client, on that way new congfiguration from .ini file will always be in app
+        :return: Trello Client Wrapper
+        """
+        authDict = self.readAuthDataFromConfig()
+        client_key = authDict['client_key']
+        client_secret = authDict['client_secret']
+        token = authDict['token']
+        token_secret = authDict['token_secret']
+
+        board_id = 'gOzNH8uG'
+        list_id = None
         listName = 'Column 1'
 
-        authorizeOAuthOb = authorizeOAuth.AuthorizeOAuth(clientKey=client_key, clientSecret=client_secret, token=token, token_secret=token_secret, board=board, list=list)
+        authorizeOAuthOb = authorizeOAuth.AuthorizeOAuth(clientKey=client_key, clientSecret=client_secret, token=token, token_secret=token_secret, board=board_id, list=list_id)
         trelloClientWrapper = authorizeOAuthOb.getClient()
 
         self.setList(trelloClientWrapper, listName)
@@ -28,3 +36,13 @@ class ClientFactory():
             print('List %s could not be found!' % listName)
         else:
             trelloClientWrapper.set_current_list(currentList)
+
+    def readAuthDataFromConfig(self):
+        config = self.get_configuration()
+        authDict = {key : value for key, value in config['OAUTH'].items()}
+        return authDict
+
+    def get_configuration(self):
+        config = configparser.ConfigParser()
+        config_file = os.path.join(os.path.dirname(__file__), 'config.ini')
+        config.read(config_file)
