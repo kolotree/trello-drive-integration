@@ -1,22 +1,23 @@
 from requests_oauthlib import OAuth1Session
+from integration.configuration import Configuration
 
-requestURL = "https://trello.com/1/OAuthGetRequestToken"
-accessURL = "https://trello.com/1/OAuthGetAccessToken"
-#authorizeURL = "https://trello.com/1/OAuthAuthorizeToken"
-authorizeURL = "https://trello.com/1/authorize?scope=read,write"
-appName = "Trello OAuth Example"
 
-client_key='ba807f65e19546e12ae15d7032620651'
-client_secret='ce4d3aef857b1442977c06b18672724f72d47ab017ae264dff42e154b8e01888'
+def save_tokens(config, token, token_secret):
+    config.save_property('token', token)
+    config.save_property('token_secret', token_secret)
+
+config = Configuration()
+client_key = config.get_client_key()
+client_secret = config.get_client_secret()
 
 oauth = OAuth1Session(client_key,client_secret)
 
-fetch_response = oauth.fetch_request_token(requestURL)
+fetch_response = oauth.fetch_request_token(config.get_request_url())
 
 resource_owner_key = fetch_response.get('oauth_token')
 resource_owner_secret = fetch_response.get('oauth_token_secret')
 
-authorization_url = oauth.authorization_url(authorizeURL)
+authorization_url = oauth.authorization_url(config.get_authorize_url())
 print('Please go here and authorize,', authorization_url)
 
 verifier = input('Paste the verification token: ')
@@ -31,7 +32,7 @@ oauth = OAuth1Session(client_key,
                       resource_owner_secret=resource_owner_secret,
                       verifier=verifier)
 
-oauth_tokens = oauth.fetch_access_token(accessURL)
+oauth_tokens = oauth.fetch_access_token(config.get_access_url())
 
 oauth_token = oauth_tokens.get('oauth_token')
 oauth_token_secret = oauth_tokens.get('oauth_token_secret')
@@ -39,3 +40,4 @@ oauth_token_secret = oauth_tokens.get('oauth_token_secret')
 
 print('oauth_token: ' + oauth_token)
 print('oauth_token_secret: ' + oauth_token_secret)
+save_tokens(config, oauth_token, oauth_token_secret)
