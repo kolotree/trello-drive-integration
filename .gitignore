@@ -1,3 +1,5 @@
 env*
 .idea*
 *.pyc
+credentials.dat
+tests/gdrive/test.json
