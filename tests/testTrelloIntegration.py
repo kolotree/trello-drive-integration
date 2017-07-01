@@ -1,6 +1,6 @@
 import unittest
-from integration.clientFactory import ClientFactory
 
+from integration.trello.clientFactory import ClientFactory
 
 
 class TestTrelloIntegration(unittest.TestCase):

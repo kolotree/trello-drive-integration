@@ -1,5 +1,5 @@
 import unittest
-from integration.configuration import Configuration
+from integration.configuration.configuration import Configuration
 
 class TestConfigurationReadWrite(unittest.TestCase):
 
