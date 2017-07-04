@@ -21,5 +21,5 @@ class RootService:
 
     def __add_trello_cards_from_company_drives(self, companies):
         results = map(lambda company: self.company_service.addTrelloCardsFromCompanyDrive(company), companies)
-        flat_results = list(itertools.chain(results))
+        flat_results = [result for sublist in results for result in sublist]
         return flat_results

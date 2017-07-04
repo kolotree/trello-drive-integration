@@ -12,8 +12,9 @@ invoice_folder_name = 'Korpa'
 
 
 class AddTrelloCardResult:
-    def __init__(self, is_success, invoice):
+    def __init__(self, is_success, company, invoice):
         self.is_success = is_success
+        self.company = company
         self.invoice = invoice
 
 
@@ -44,6 +45,6 @@ class CompanyService:
 
     def __add_invoices_to_trello_for(self, company, invoices):
         add_trello_card_results = map(
-            lambda invoice: AddTrelloCardResult(self.trello_card_writer.add_invoice_for(company, invoice), invoice),
+            lambda invoice: AddTrelloCardResult(self.trello_card_writer.add_invoice_for(company, invoice), company, invoice),
             invoices)
         return list(add_trello_card_results)
