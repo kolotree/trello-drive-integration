@@ -3,8 +3,8 @@ from integration.services.domain import Invoice
 
 
 class InvoiceFolderDoesntExist(Exception):
-    def __init__(self, companyName, folderName):
-        message = 'Invoice folder ' + folderName + ' does not exist for company ' + companyName
+    def __init__(self, folder_name, company):
+        message = 'Invoice folder ' + folder_name + ' does not exist for company ' + str(company)
         super(InvoiceFolderDoesntExist, self).__init__(message)
 
 
@@ -33,7 +33,7 @@ class CompanyService:
         invoiceFolderList = [item for item in driveItems if
                              (item.type == ItemType.FOLDER and item.name == invoice_folder_name)]
         if len(invoiceFolderList) != 1:
-            raise InvoiceFolderDoesntExist(company.name)
+            raise InvoiceFolderDoesntExist(invoice_folder_name, company)
 
         return invoiceFolderList[0]
 

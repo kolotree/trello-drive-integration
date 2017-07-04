@@ -3,14 +3,14 @@ class Invoice:
         self.id = id
         self.name = name
 
+    def __str__(self):
+        return "id: '" + self.id + "', name: '" + self.name + "'"
+
 
 class Company:
-    def __init__(self, id, name, invoices=[]):
+    def __init__(self, id, name):
         self.id = id
         self.name = name
-        self.invoices = invoices
 
-    def add_invoices(self, invoiceList):
-        invoices = list(self.invoices)
-        invoices.extend(invoiceList)
-        return Company(self.id, self.name, invoices)
+    def __str__(self):
+        return "id: '" + self.id + "', name: '" + self.name + "'"
