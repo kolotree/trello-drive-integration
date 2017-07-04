@@ -12,6 +12,5 @@ class Company:
 
     def add_invoices(self, invoiceList):
         invoices = list(self.invoices)
-        invoices.extend((invoiceList))
+        invoices.extend(invoiceList)
         return Company(self.id, self.name, invoices)
-

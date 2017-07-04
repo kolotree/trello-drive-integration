@@ -11,6 +11,9 @@ folder_id = test_config["folder_id"]
 
 service = ServiceProvider(client_id, client_secret).getDriveServiceInstance()
 
+def get_test_file_explorer_instance():
+    return FileExplorer(service)
+
 
 class FileExplorerTests(TestCase):
     def test_get_items_using_folder_id(self):
