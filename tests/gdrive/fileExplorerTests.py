@@ -17,3 +17,12 @@ class FileExplorerTests(TestCase):
         file_explorer = FileExplorer(service)
         drive_items = file_explorer.get_items_using_folder_id(folder_id)
         self.assertNotEquals(len(drive_items), 0)
+
+    def test_drive_item_is_correctly_filled(self):
+        file_explorer = FileExplorer(service)
+        drive_items = file_explorer.get_items_using_folder_id(folder_id)
+
+        first_item = drive_items[0]
+        self.assertIsNotNone(first_item.id)
+        self.assertIsNotNone(first_item.name)
+        self.assertIsNotNone(first_item.type)
