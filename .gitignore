@@ -4,3 +4,4 @@ env*
 credentials.dat
 tests/gdrive/test.json
 integration/configuration.json
+integration/trello-drive-integration.log
