@@ -3,3 +3,4 @@ env*
 *.pyc
 credentials.dat
 tests/gdrive/test.json
+integration/configuration.json
