@@ -1,13 +1,14 @@
 import configparser
 import os
 
+config_file = os.path.join(os.path.dirname(__file__), 'config.ini')
+
 class Configuration():
     def __init__(self):
         pass
 
     def get_configuration(self):
         config = configparser.ConfigParser()
-        config_file = os.path.join(os.path.dirname(__file__), 'config.ini')
         config.read(config_file)
         return config
 
@@ -41,4 +42,7 @@ class Configuration():
         return self.get_configuration()[section][key]
 
     def save_property(self, key, value, section='OAUTH'):
-        self.get_configuration().set(section, key, value)
+        config = self.get_configuration()
+        config.set(section, key, value)
+        with open(config_file, 'w') as configfile:
+            config.write(configfile)

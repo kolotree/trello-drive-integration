@@ -1,5 +1,6 @@
-from integration import authorizeOAuth
-from integration.configuration import Configuration
+from integration.configuration.configuration import Configuration
+from integration.trello import authorizeOAuth
+
 
 class ClientFactory():
 

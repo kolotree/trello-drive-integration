@@ -1,5 +1,5 @@
 from requests_oauthlib import OAuth1Session
-from integration.configuration import Configuration
+from integration.configuration.configuration import Configuration
 
 
 def save_tokens(config, token, token_secret):
