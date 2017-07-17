@@ -14,7 +14,7 @@ class Configuration():
 
     def read_auth_data_from_config(self):
         config = self.get_configuration()
-        auth_dict = {key: value for key, value in config['OAUTH'].items()}
+        auth_dict = {key: value for key, value in config['TRELLO_OAUTH'].items()}
         return auth_dict
 
     def get_client_key(self):
@@ -24,19 +24,34 @@ class Configuration():
         return self.read_auth_data_from_config()['client_secret']
 
     def read_board_id_config(self):
-        return self.read_property('BOARD','board_id')
+        return self.read_property('TRELLO_BOARD','board_id')
 
     def read_list_name_config(self):
-        return self.read_property('LIST','list_name')
+        return self.read_property('TRELLO_LIST','list_name')
 
     def get_request_url(self):
-        return self.read_property('OAUTH_URLS','requestURL')
+        return self.read_property('TRELLO_OAUTH_URLS','requestURL')
 
     def get_access_url(self):
-        return self.read_property('OAUTH_URLS','accessURL')
+        return self.read_property('TRELLO_OAUTH_URLS','accessURL')
 
     def get_authorize_url(self):
-        return self.read_property('OAUTH_URLS','authorizeURL')
+        return self.read_property('TRELLO_OAUTH_URLS','authorizeURL')
+
+    def get_gdrive_root_folder_id(self):
+        return self.read_property('GDRIVE','root_folder_id')
+
+    def get_gdrive_client_id(self):
+        return self.read_property('GDRIVE','client_id')
+
+    def get_gdrive_client_secret(self):
+        return self.read_property('GDRIVE', 'client_secret')
+
+    def get_logging_file_path(self):
+        return self.read_property('LOGGING', 'file_path')
+
+    def get_logging_log_level(self):
+        return self.read_property('LOGGING', 'log_level')
 
     def read_property(self, section, key):
         return self.get_configuration()[section][key]
