@@ -1,4 +1,4 @@
-from .clientFactory import ClientFactory
+from integration.trellow.clientFactory import ClientFactory
 
 
 class TrelloCardWriter:

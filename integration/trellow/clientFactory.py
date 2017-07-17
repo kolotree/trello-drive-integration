@@ -1,9 +1,8 @@
 from integration.configuration.configuration import Configuration
-from integration.trello import authorizeOAuth
+from integration.trellow import authorizeOAuth
 
 
 class ClientFactory():
-
     def __init__(self):
         pass
 

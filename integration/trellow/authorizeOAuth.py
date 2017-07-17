@@ -1,4 +1,4 @@
-from integration.trello.TrelloClientWrapper import TrelloClientWrapper
+from integration.trellow.TrelloClientWrapper import TrelloClientWrapper
 
 class AuthorizeOAuth():
     def __init__(self, clientKey, clientSecret, token, token_secret, board=None, list=None):

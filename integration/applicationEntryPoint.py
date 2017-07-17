@@ -1,7 +1,7 @@
 import json
 from integration.gdrive.serviceProvider import ServiceProvider
 from integration.gdrive.fileExplorer import FileExplorer
-from integration.trello.trelloCardWriter import TrelloCardWriter
+from integration.trellow.trelloCardWriter import TrelloCardWriter
 from integration.services.companyService import CompanyService
 from integration.services.rootService import RootService
 from integration.myLogging.myLogger import get_my_logger_instance
