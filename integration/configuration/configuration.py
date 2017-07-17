@@ -66,6 +66,15 @@ class Configuration():
     def get_logging_log_level(self):
         return self.read_property('LOGGING', 'log_level')
 
+    def get_logging_from_address(self):
+        return self.read_property('LOGGING', 'from_address')
+
+    def get_logging_from_password(self):
+        return self.read_property('LOGGING', 'from_password')
+
+    def get_logging_to_list(self):
+        return self.read_property('LOGGING', 'to_list')
+
     def read_property(self, section, key):
         return self.get_configuration()[section][key]
 
