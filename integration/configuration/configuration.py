@@ -1,15 +1,28 @@
 import configparser
 import os
-
-config_file = os.path.join(os.path.dirname(__file__), 'config.ini')
+import sys
 
 class Configuration():
     def __init__(self):
         pass
 
+    def get_config_file(self):
+        return self.find_data_file('config.ini')
+
+    def find_data_file(self, filename):
+        if getattr(sys, 'frozen', False):
+            # The application is frozen
+            datadir = os.path.dirname(sys.executable)
+        else:
+            # The application is not frozen
+            # Change this bit to match where you store your data files:
+            datadir = os.path.dirname(__file__)
+
+        return os.path.join(datadir, filename)
+
     def get_configuration(self):
         config = configparser.ConfigParser()
-        config.read(config_file)
+        config.read(self.get_config_file())
         return config
 
     def read_auth_data_from_config(self):
@@ -53,11 +66,20 @@ class Configuration():
     def get_logging_log_level(self):
         return self.read_property('LOGGING', 'log_level')
 
+    def get_logging_from_address(self):
+        return self.read_property('LOGGING', 'from_address')
+
+    def get_logging_from_password(self):
+        return self.read_property('LOGGING', 'from_password')
+
+    def get_logging_to_list(self):
+        return self.read_property('LOGGING', 'to_list')
+
     def read_property(self, section, key):
         return self.get_configuration()[section][key]
 
     def save_property(self, key, value, section='OAUTH'):
         config = self.get_configuration()
         config.set(section, key, value)
-        with open(config_file, 'w') as configfile:
+        with open(self.get_config_file(), 'w') as configfile:
             config.write(configfile)
