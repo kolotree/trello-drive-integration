@@ -35,7 +35,7 @@ class TrelloClientWrapper(TrelloClient):
         return self.add_card(name, description)
 
     def get_card_by_name(self, card_name):
-        cards = [card for card in self.list.list_cards('all') if card.name == card_name]
+        cards = [card for card in self.board.all_cards() if card.name == card_name]
         if len(cards) == 0:
             print('Founded 0 cards, returning None')
             return []

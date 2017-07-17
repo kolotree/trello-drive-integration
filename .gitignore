@@ -6,4 +6,3 @@ tests/gdrive/test.json
 integration/configuration.json
 integration/trello-drive-integration.log
 integration/configuration/config.ini
-/integration/configuration/config.ini
