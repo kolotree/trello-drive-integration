@@ -4,7 +4,7 @@ from integration.gdrive.fileExplorer import FileExplorer
 from integration.trellow.trelloCardWriter import TrelloCardWriter
 from integration.services.companyService import CompanyService
 from integration.services.rootService import RootService
-from integration.myLogging.myLogger import get_my_logger_instance
+from integration.myLogging.factory import get_my_logger_instance
 import traceback
 
 def get_file_explorer_instance(gdrive_client_id, gdrive_client_secret):
@@ -29,7 +29,7 @@ def get_root_service_instance_using(config):
     return root_service
 
 def get_my_logger_instance_using(config):
-    return get_my_logger_instance(config.get_logging_file_path(), config.get_logging_log_level())
+    return get_my_logger_instance(config.get_logging_file_path(), config.get_logging_log_level(), config.get_logging_from_address(), config.get_logging_from_password(), config.get_logging_to_list())
 
 # Read configuration, create service instances and process the root folder
 configuration = Configuration()
