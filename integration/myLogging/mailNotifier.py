@@ -36,12 +36,10 @@ class MailNotifier:
         added_cards = [('Company: %s: Invoice: %s') % (r.company.name, r.invoice.name) for r in trello_card_results if r.is_success]
         skipped_cards = [('Company: %s: Invoice: %s') % (r.company.name, r.invoice.name) for r in trello_card_results if not r.is_success]
 
-        added_cards_body = 'The following cards are added:' + '\n'.join(added_cards)
-        skipped_cards_body = '\nThe following cards are skipped since they exist: ' + '\n'.join(skipped_cards)
-        body = added_cards_body + '\n' + skipped_cards_body
+        added_cards_body = 'The following cards are added:\n- ' + '\n- '.join(added_cards)
+        skipped_cards_body = '\nThe following cards are skipped since they exist:\n- ' + '\n- '.join(skipped_cards)
+        body = added_cards_body + '\n\n' + skipped_cards_body
         return body
-
-
 
     def __create_mail_body_from_exception(self, exception):
         return 'Processing failed with the following exception: ' + exception + '. See log files for more details.'
