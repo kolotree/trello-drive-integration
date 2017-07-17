@@ -1,4 +1,4 @@
-from trello import TrelloClient
+from trello.trelloclient import TrelloClient
 
 class TrelloClientWrapper(TrelloClient):
 
