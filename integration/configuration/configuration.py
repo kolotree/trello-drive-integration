@@ -78,7 +78,7 @@ class Configuration():
     def read_property(self, section, key):
         return self.get_configuration()[section][key]
 
-    def save_property(self, key, value, section='OAUTH'):
+    def save_property(self, key, value, section='TRELLO_OAUTH'):
         config = self.get_configuration()
         config.set(section, key, value)
         with open(self.get_config_file(), 'w') as configfile:

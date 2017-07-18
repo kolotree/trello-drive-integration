@@ -18,7 +18,7 @@ resource_owner_key = fetch_response.get('oauth_token')
 resource_owner_secret = fetch_response.get('oauth_token_secret')
 
 authorization_url = oauth.authorization_url(config.get_authorize_url())
-print('Please go here and authorize,', authorization_url)
+print('Please go here and authorize,', authorization_url+'&expiration=never')
 
 verifier = input('Paste the verification token: ')
 
