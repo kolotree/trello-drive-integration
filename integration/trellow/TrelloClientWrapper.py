@@ -1,9 +1,15 @@
 from trello.trelloclient import TrelloClient
+from integration.configuration.configuration import Configuration
+from integration.myLogging.myLogger import MyLogger
 
 class TrelloClientWrapper(TrelloClient):
 
     def __init__(self, api_key, api_secret=None, token=None, token_secret=None, board=None, list=None):
         super(TrelloClientWrapper, self).__init__(api_key, api_secret, token, token_secret)
+
+        configuration = Configuration()
+        self.myLogger = MyLogger(configuration.get_logging_file_path(), configuration.get_logging_log_level())
+
         if board == None :
             self.board = None
         else:
@@ -16,20 +22,20 @@ class TrelloClientWrapper(TrelloClient):
 
     def add_card(self, name, description):
         if self.board == None or self.list == None:
-            print('Card cannot be added because board and/or list ID is not defined')
+            self.myLogger.log_info('Card cannot be added because board and/or list ID is not defined')
             return None
 
         return self.list.add_card(name=name, desc=description)
 
     def add_card_conditionaly(self, name, description):
         if self.board == None or self.list == None:
-            print('Card cannot be added because board and/or list ID is not defined')
+            self.myLogger.log_info('Card cannot be added because board and/or list ID is not defined')
             return None
 
         current_card = self.get_card_by_name(name)
 
         if len(current_card) > 0:
-            print('Card already exists')
+            self.myLogger.log_info('Card "' + name + '" already exists')
             return None
 
         return self.add_card(name, description)
@@ -37,7 +43,6 @@ class TrelloClientWrapper(TrelloClient):
     def get_card_by_name(self, card_name):
         cards = [card for card in self.board.all_cards() if card.name == card_name]
         if len(cards) == 0:
-            print('Founded 0 cards, returning None')
             return []
         return cards
 

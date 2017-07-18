@@ -19,3 +19,6 @@ class MyLogger:
 
     def log_exception(self, exception):
         self.logger.error(exception)
+
+    def log_info(self, message):
+        self.logger.info(message)
