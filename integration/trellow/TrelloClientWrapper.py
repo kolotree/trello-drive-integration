@@ -40,11 +40,28 @@ class TrelloClientWrapper(TrelloClient):
 
         return self.add_card(name, description)
 
+    def add_or_update_card(self, name, description):
+        results = self.get_opened_cards_by_description(description)
+        if len(results) > 1:
+            self.myLogger.log_info('Founded more than 1 card with description: ' + description)
+            return None
+
+        if results == []:
+            return self.add_card(name, description)
+        else:
+            results[0].set_name(name)
+            return results[0]
+
     def get_card_by_name(self, card_name):
         cards = [card for card in self.board.all_cards() if card.name == card_name]
         if len(cards) == 0:
             return []
         return cards
+
+    def get_opened_cards_by_description(self, description):
+        all_cards = self.search(description, partial_match=False, models=['cards'],board_ids=[self.board.id])
+        results = [card for card in all_cards if card.closed == False]
+        return results
 
     def delete_card(self, card_name):
         cards = self.get_card_by_name(card_name)
