@@ -13,9 +13,7 @@ class MyLogger:
 
     def log_trello_card_results(self, trello_card_results):
         for result in trello_card_results:
-            self.logger.info(
-                'Result: ' + str(result.is_success) + ' for invoice ' + str(result.invoice) + ' for company ' + str(
-                    result.company))
+            self.logger.info('Company: %s, Is card added: %s. (UF: %s, IF: %s)' % (result.company, result.is_success, str(result.input_invoices_count), str(result.output_invoices_count)))
 
     def log_exception(self, exception):
         self.logger.error(exception)

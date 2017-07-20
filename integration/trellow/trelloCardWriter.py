@@ -5,10 +5,6 @@ class TrelloCardWriter:
     def __init__(self):
         self.trelloClientWrapper = ClientFactory().getClient()
 
-    def add_invoice_for(self, company, invoice):
-        card_name = company.name + ': ' + invoice.name + '(' + invoice.id + ')'
-        card_description = ''
-        if self.trelloClientWrapper.add_card_conditionaly(card_name, card_description) is None:
-            return False
-        else:
-            return True
+    def add_invoices_for(self, company, input_invoices_count, output_invoices_count):
+        print ('Company: %s, UF: %s, IF: %s' % (company.name, str(input_invoices_count), str(output_invoices_count)))
+        return True
