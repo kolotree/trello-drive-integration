@@ -41,3 +41,4 @@ try:
 except:
     tb = traceback.format_exc()
     myLogger.log_exception(tb)
+    raise

@@ -13,7 +13,7 @@ company = Company(company_id, company_name)
 
 
 class CompanyServiceTests(TestCase):
-    def test_some_invoices_are_processed(self):
+    def test_card_is_added_for_company(self):
         companyService = get_test_company_service_instance()
-        add_trello_card_results = companyService.addTrelloCardsFromCompanyDrive(company)
-        self.assertNotEquals(len(add_trello_card_results), 0)
+        add_trello_card_result = companyService.addTrelloCardFromCompanyDrive(company)
+        self.assertTrue(add_trello_card_result.is_success)

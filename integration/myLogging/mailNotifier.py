@@ -33,8 +33,8 @@ class MailNotifier:
         return 'Trello-Drive-Integration tool execution failed! (' + datetime_now + ')'
 
     def __create_mail_body_from_results(self, trello_card_results):
-        added_cards = [('Company: %s: Invoice: %s') % (r.company.name, r.invoice.name) for r in trello_card_results if r.is_success]
-        skipped_cards = [('Company: %s: Invoice: %s') % (r.company.name, r.invoice.name) for r in trello_card_results if not r.is_success]
+        added_cards = [('Company: %s, UF: %s, IF: %s') % (r.company.name, str(r.input_invoices_count), str(r.output_invoices_count)) for r in trello_card_results if r.is_success]
+        skipped_cards = [('Company: %s:  UF: %s, IF: %s') % (r.company.name, str(r.input_invoices_count), str(r.output_invoices_count)) for r in trello_card_results if not r.is_success]
 
         added_cards_body = 'The following cards are added:\n- ' + '\n- '.join(added_cards)
         skipped_cards_body = '\nThe following cards are skipped since they exist:\n- ' + '\n- '.join(skipped_cards)
