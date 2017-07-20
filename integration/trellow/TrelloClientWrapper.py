@@ -50,7 +50,7 @@ class TrelloClientWrapper(TrelloClient):
             return self.add_card(name, description)
         else:
             results[0].set_name(name)
-            return results[0]
+            return []
 
     def get_card_by_name(self, card_name):
         cards = [card for card in self.board.all_cards() if card.name == card_name]
