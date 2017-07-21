@@ -51,8 +51,8 @@ class Configuration():
     def get_authorize_url(self):
         return self.read_property('TRELLO_OAUTH_URLS','authorizeURL')
 
-    def get_gdrive_root_folder_id(self):
-        return self.read_property('GDRIVE','root_folder_id')
+    def get_gdrive_root_folder_ids(self):
+        return self.read_property('GDRIVE','root_folder_ids')
 
     def get_gdrive_client_id(self):
         return self.read_property('GDRIVE','client_id')
