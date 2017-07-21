@@ -15,7 +15,7 @@ class RootService:
 
     def __get_companies_for(self, folder_id):
         driveItems = self.file_explorer.get_items_using_folder_id(folder_id)
-        company_drive_items = [item for item in driveItems if item.type == ItemType.FOLDER]
+        company_drive_items = [item for item in driveItems if item.type == ItemType.FOLDER and not item.name.startswith('#')]
         companies = map(lambda folder_item: Company(folder_item.id, folder_item.name), company_drive_items)
         return list(companies)
 
