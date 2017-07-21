@@ -33,7 +33,10 @@ class CompanyService:
         output_invoices_folder = self.__get_output_invoice_folder_for(company)
         output_invoices = self.__get_invoices_from(output_invoices_folder)
 
-        are_invoices_added = self.trello_card_writer.add_invoices_for(company, len(input_invoices), len(output_invoices))
+        are_invoices_added = False
+        if len(input_invoices) != 0 or len(output_invoices) != 0:
+            are_invoices_added = self.trello_card_writer.add_invoices_for(company, len(input_invoices), len(output_invoices))
+
         return AddTrelloCardResult(are_invoices_added, company, len(input_invoices), len(output_invoices))
 
     def __get_input_invoice_folder_for(self, company):
