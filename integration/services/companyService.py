@@ -1,6 +1,6 @@
 from integration.gdrive.driveItem import ItemType
 from integration.services.domain import Invoice
-
+from enum import Enum
 
 class InvoiceFolderDoesntExist(Exception):
     def __init__(self, folder_name, company):
@@ -12,10 +12,15 @@ input_invoice_folder_name = 'Ulazne fakture'
 output_invoice_folder_name = 'Izlazne fakture'
 invoice_folder_name = 'Korpa'
 
+class AddCardStatus(Enum):
+    SUCCESS = 1
+    SKIPPED = 2
+    BAD_FOLDER_STRUCTURE = 3
+    ZERO_INVOICES = 4
 
 class AddTrelloCardResult:
-    def __init__(self, is_success, company, input_invoices_count, output_invoices_count):
-        self.is_success = is_success
+    def __init__(self, added_card_status, company, input_invoices_count, output_invoices_count):
+        self.added_card_status = added_card_status
         self.company = company
         self.input_invoices_count = input_invoices_count
         self.output_invoices_count = output_invoices_count
@@ -27,17 +32,25 @@ class CompanyService:
         self.trello_card_writer = trello_card_writer
 
     def addTrelloCardFromCompanyDrive(self, company):
-        input_invoices_folder = self.__get_input_invoice_folder_for(company)
-        input_invoices = self.__get_invoices_from(input_invoices_folder)
+        input_invoices = []
+        output_invoices = []
 
-        output_invoices_folder = self.__get_output_invoice_folder_for(company)
-        output_invoices = self.__get_invoices_from(output_invoices_folder)
+        try:
+            input_invoices_folder = self.__get_input_invoice_folder_for(company)
+            input_invoices = self.__get_invoices_from(input_invoices_folder)
 
-        are_invoices_added = False
-        if len(input_invoices) != 0 or len(output_invoices) != 0:
+            output_invoices_folder = self.__get_output_invoice_folder_for(company)
+            output_invoices = self.__get_invoices_from(output_invoices_folder)
+
+            if len(input_invoices) == 0 and len(output_invoices) == 0:
+                return AddTrelloCardResult(AddCardStatus.ZERO_INVOICES, company, 0, 0)
+
             are_invoices_added = self.trello_card_writer.add_invoices_for(company, len(input_invoices), len(output_invoices))
+            return AddTrelloCardResult(AddCardStatus.SUCCESS if are_invoices_added else AddCardStatus.SKIPPED, company, len(input_invoices), len(output_invoices))
 
-        return AddTrelloCardResult(are_invoices_added, company, len(input_invoices), len(output_invoices))
+        except InvoiceFolderDoesntExist:
+            print('exception occured')
+            return AddTrelloCardResult(AddCardStatus.BAD_FOLDER_STRUCTURE, company, 0, 0)
 
     def __get_input_invoice_folder_for(self, company):
         input_invoice_folder = self.__get_subfolder_for(company.id, input_invoice_folder_name, company.name)

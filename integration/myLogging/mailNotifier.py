@@ -1,5 +1,6 @@
 import yagmail
 from datetime import datetime
+from integration.services.companyService import AddCardStatus
 
 class MailNotifier:
     def __init__(self, my_logger, from_address, from_password, to_list):
@@ -23,22 +24,40 @@ class MailNotifier:
         self.__send_mail(subject, body)
 
     def __create_subject_for_sucessful_processing(self, trello_card_results):
-        added_cards_count = len([r for r in trello_card_results if r.is_success])
-        skipped_cards_count = len([r for r in trello_card_results if not r.is_success])
+        added_cards_count = len([r for r in trello_card_results if r.added_card_status == AddCardStatus.SUCCESS])
+        skipped_cards_count = len([r for r in trello_card_results if r.added_card_status == AddCardStatus.SKIPPED])
+        bad_folder_structure_count = len([r for r in trello_card_results if r.added_card_status == AddCardStatus.BAD_FOLDER_STRUCTURE])
         datetime_now = str(datetime.now())
-        return 'Trello-Drive-Integration tool successfully executed (' + datetime_now + '). Added cards: ' + str(added_cards_count) + '. Skipeed cards: ' + str(skipped_cards_count)
+        return self.__generateSubject(added_cards_count, datetime_now, skipped_cards_count, bad_folder_structure_count)
+
+    def __generateSubject(self, added_cards_count, datetime_now, skipped_cards_count, bad_folder_structure_count):
+        subject = ''
+        if bad_folder_structure_count > 0:
+            subject += 'Trello-Drive-Integration tool - bad folder structure! ('
+        else:
+            subject += 'Trello-Drive-Integration tool successfully executed ('
+
+        return subject + datetime_now + '). Added cards: ' + str(
+            added_cards_count) + '. Skipeed cards: ' + str(skipped_cards_count)
 
     def __create_subject_for_failed_processing(self):
         datetime_now = str(datetime.now())
         return 'Trello-Drive-Integration tool execution failed! (' + datetime_now + ')'
 
     def __create_mail_body_from_results(self, trello_card_results):
-        added_cards = [('Company: %s, UF: %s, IF: %s') % (r.company.name, str(r.input_invoices_count), str(r.output_invoices_count)) for r in trello_card_results if r.is_success]
-        skipped_cards = [('Company: %s:  UF: %s, IF: %s') % (r.company.name, str(r.input_invoices_count), str(r.output_invoices_count)) for r in trello_card_results if not r.is_success]
+        added_cards = [('Company: %s, UF: %s, IF: %s') % (r.company.name, str(r.input_invoices_count), str(r.output_invoices_count)) for r in trello_card_results if r.added_card_status == AddCardStatus.SUCCESS]
+        skipped_cards = [('Company: %s:  UF: %s, IF: %s') % (r.company.name, str(r.input_invoices_count), str(r.output_invoices_count)) for r in trello_card_results if r.added_card_status == AddCardStatus.SKIPPED]
 
         added_cards_body = 'The following cards are added:\n- ' + '\n- '.join(added_cards)
         skipped_cards_body = '\nThe following cards are skipped since they exist:\n- ' + '\n- '.join(skipped_cards)
-        body = added_cards_body + '\n\n' + skipped_cards_body
+
+        body = ''
+        if len([r for r in trello_card_results if r.added_card_status == AddCardStatus.BAD_FOLDER_STRUCTURE]) > 0:
+            bad_folder_structure = [('Company: %s ') % (r.company.name) for r in trello_card_results if r.added_card_status == AddCardStatus.BAD_FOLDER_STRUCTURE]
+            bad_folder_structure_body = 'The following companies have bad folder structure!:\n - ' + '\n - '.join(bad_folder_structure)
+            body = bad_folder_structure_body + '\n\n'
+
+        body += added_cards_body + '\n\n' + skipped_cards_body
         return body
 
     def __create_mail_body_from_exception(self, exception):
