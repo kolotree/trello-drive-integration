@@ -1,6 +1,7 @@
 from integration.gdrive.driveItem import ItemType
 from integration.services.domain import Invoice
-from enum import Enum
+from integration.myLogging.loggerFactory import LoggerFactory
+from integration.services.AddCardStatus import AddCardStatus
 
 class InvoiceFolderDoesntExist(Exception):
     def __init__(self, folder_name, company):
@@ -11,12 +12,6 @@ class InvoiceFolderDoesntExist(Exception):
 input_invoice_folder_name = 'Ulazne fakture'
 output_invoice_folder_name = 'Izlazne fakture'
 invoice_folder_name = 'Korpa'
-
-class AddCardStatus(Enum):
-    SUCCESS = 1
-    SKIPPED = 2
-    BAD_FOLDER_STRUCTURE = 3
-    ZERO_INVOICES = 4
 
 class AddTrelloCardResult:
     def __init__(self, added_card_status, company, input_invoices_count, output_invoices_count):
@@ -48,8 +43,8 @@ class CompanyService:
             are_invoices_added = self.trello_card_writer.add_invoices_for(company, len(input_invoices), len(output_invoices))
             return AddTrelloCardResult(AddCardStatus.SUCCESS if are_invoices_added else AddCardStatus.SKIPPED, company, len(input_invoices), len(output_invoices))
 
-        except InvoiceFolderDoesntExist:
-            print('exception occured')
+        except InvoiceFolderDoesntExist as err:
+            LoggerFactory().getLoggerInstance().log_exception(err)
             return AddTrelloCardResult(AddCardStatus.BAD_FOLDER_STRUCTURE, company, 0, 0)
 
     def __get_input_invoice_folder_for(self, company):

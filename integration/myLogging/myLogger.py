@@ -1,5 +1,5 @@
 import logging
-from integration.services.companyService import AddCardStatus
+from integration.services.AddCardStatus import AddCardStatus
 
 class MyLogger:
     def __init__(self, logFilePath, logLevel):

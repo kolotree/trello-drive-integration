@@ -1,6 +1,6 @@
 import yagmail
 from datetime import datetime
-from integration.services.companyService import AddCardStatus
+from integration.services.AddCardStatus import AddCardStatus
 
 class MailNotifier:
     def __init__(self, my_logger, from_address, from_password, to_list):
