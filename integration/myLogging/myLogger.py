@@ -13,7 +13,7 @@ class MyLogger:
 
     def log_trello_card_results(self, trello_card_results):
         for result in trello_card_results:
-            self.logger.info('Company: %s, Is card added: %s. (UF: %s, IF: %s)' % (result.company, self.__evaluate_success(result.added_card_status), str(result.input_invoices_count), str(result.output_invoices_count)))
+            self.logger.info('Company: %s, Is card added: %s. (%s)' % (result.company, self.__evaluate_success(result.added_card_status), str(result.invoice_groups)))
 
     def __evaluate_success(self, added_card_status):
         return True if added_card_status == AddCardStatus.SUCCESS else False

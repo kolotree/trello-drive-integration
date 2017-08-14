@@ -43,7 +43,7 @@ class TrelloClientWrapper(TrelloClient):
     def add_or_update_card(self, name, description):
         results = self.get_opened_cards_by_description(description)
         if len(results) > 1:
-            self.myLogger.log_info('Founded more than 1 card with description: ' + description)
+            self.myLogger.log_info('Found more than 1 card with description: ' + description)
             return None
 
         if results == []:

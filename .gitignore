@@ -8,3 +8,4 @@ integration/trello-drive-integration.log
 integration/configuration/config.ini
 /build/
 /.cache/
+trello-drive-integration.log
