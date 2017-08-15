@@ -60,6 +60,9 @@ class Configuration():
     def get_gdrive_client_secret(self):
         return self.read_property('GDRIVE', 'client_secret')
 
+    def get_gdrive_invoice_groups(self):
+        return self.read_property('GDRIVE', 'invoice_groups').split(',')
+
     def get_logging_file_path(self):
         return self.read_property('LOGGING', 'file_path')
 

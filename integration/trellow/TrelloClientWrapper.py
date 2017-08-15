@@ -1,6 +1,6 @@
 from trello.trelloclient import TrelloClient
 from integration.configuration.configuration import Configuration
-from integration.myLogging.myLogger import MyLogger
+from integration.myLogging.loggerFactory import LoggerFactory
 
 class TrelloClientWrapper(TrelloClient):
 
@@ -8,7 +8,7 @@ class TrelloClientWrapper(TrelloClient):
         super(TrelloClientWrapper, self).__init__(api_key, api_secret, token, token_secret)
 
         configuration = Configuration()
-        self.myLogger = MyLogger(configuration.get_logging_file_path(), configuration.get_logging_log_level())
+        self.myLogger = LoggerFactory().getLoggerInstance()
 
         if board == None :
             self.board = None

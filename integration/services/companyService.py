@@ -2,6 +2,7 @@ from integration.gdrive.driveItem import ItemType
 from integration.services.domain import Invoice
 from integration.myLogging.loggerFactory import LoggerFactory
 from integration.services.AddCardStatus import AddCardStatus
+from integration.configuration.configuration import Configuration
 
 
 class InvoiceFolderDoesntExist(Exception):
@@ -44,7 +45,7 @@ class CompanyService:
         self.trello_card_writer = trello_card_writer
 
     def addTrelloCardFromCompanyDrive(self, company):
-        invoice_group_names = ['Ulazne fakture', 'Izlazne fakture', 'Fiskalna']
+        invoice_group_names = Configuration().get_gdrive_invoice_groups()
 
         invoice_group_list = []
         for invoice_group_name in invoice_group_names:

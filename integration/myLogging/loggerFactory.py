@@ -1,7 +1,9 @@
 from integration.configuration.configuration import Configuration
 from integration.myLogging.myLogger import MyLogger
 
-class LoggerFactory():
+class LoggerFactory:
+    logger_instance = None
+
     def __init__(self, config = Configuration()):
         self.config = config
 
@@ -12,4 +14,7 @@ class LoggerFactory():
         return self.get_my_logger_instance(config.get_logging_file_path(), config.get_logging_log_level())
 
     def get_my_logger_instance(self, logFilePath, logLevel):
-        return MyLogger(logFilePath, logLevel)
+        if (LoggerFactory.logger_instance == None):
+            LoggerFactory.logger_instance = MyLogger(logFilePath, logLevel)
+        return LoggerFactory.logger_instance
+
