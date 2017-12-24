@@ -86,3 +86,15 @@ class Configuration():
         config.set(section, key, value)
         with open(self.get_config_file(), 'w') as configfile:
             config.write(configfile)
+
+    def get_dict_in_section(self, section='AUTO_ASSIGN_MEMBER_TO_CARD'):
+        return dict(self.get_configuration().items(section))
+
+    def get_assigned_user_for_company(self, company_name):
+        users = self.get_dict_in_section()
+        for user, all_companies in users.items():
+            list_of_companies = all_companies.split(',')
+            for company in list_of_companies:
+                if company_name.find(company.strip()) >= 0:
+                    return user
+        return None
