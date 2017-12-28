@@ -1,3 +1,4 @@
+from integration.myLogging.loggerFactory import LoggerFactory
 from integration.trellow.clientFactory import ClientFactory
 from integration.configuration.configuration import Configuration
 from trello import ResourceUnavailable
@@ -6,6 +7,7 @@ from trello import ResourceUnavailable
 class TrelloCardWriter:
     def __init__(self):
         self.trelloClientWrapper = ClientFactory().getClient()
+        self.myLogger = LoggerFactory().getLoggerInstance()
 
     def add_invoices_for(self, company, invoice_groups):
         print ('Company: %s, %s' % (company.name, str(invoice_groups)))
@@ -18,13 +20,14 @@ class TrelloCardWriter:
     def assign_member_to_card(self, card):
         if (card == None):
             return
-        member_id = self.get_member_by_card_name(card.name)
-        member = None if member_id == None else self.trelloClientWrapper.get_member(member_id)
+        member_name = self.get_member_by_card_name(card.name)
+        member = None if member_name == None else self.trelloClientWrapper.get_member(member_name)
         if (member != None and member.id != None):
             try:
+                self.myLogger.log_info('Adding Member "{0}" to Card "{1}"'.format(member_name, card.name))
                 card.assign(member.id)
             except ResourceUnavailable as ru:
-                print (ru)
+                self.myLogger.log_exception(ru)
 
 
     def get_member_by_card_name(self, card_name):
