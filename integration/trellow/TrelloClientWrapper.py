@@ -1,3 +1,4 @@
+
 from trello.trelloclient import TrelloClient
 from integration.configuration.configuration import Configuration
 from integration.myLogging.loggerFactory import LoggerFactory
@@ -27,6 +28,7 @@ class TrelloClientWrapper(TrelloClient):
 
         return self.list.add_card(name=name, desc=description)
 
+    # deprecated
     def add_card_conditionaly(self, name, description):
         if self.board == None or self.list == None:
             self.myLogger.log_info('Card cannot be added because board and/or list ID is not defined')
@@ -44,13 +46,14 @@ class TrelloClientWrapper(TrelloClient):
         results = self.get_opened_cards_by_description(description)
         if len(results) > 1:
             self.myLogger.log_info('Found more than 1 card with description: ' + description)
-            return None
+            return [False, None]
 
         if results == []:
-            return self.add_card(name, description)
+            card = self.add_card(name, description)
+            return [True, card]
         else:
             results[0].set_name(name)
-            return []
+            return [False, results[0]]
 
     def get_card_by_name(self, card_name):
         cards = [card for card in self.board.all_cards() if card.name == card_name]
