@@ -98,3 +98,12 @@ class Configuration():
                 if company_name.find(company.strip()) >= 0:
                     return user
         return None
+
+    def get_label_color_for_company(self, company_name):
+        labels_with_companies = self.get_dict_in_section('LABELS')
+        for color, all_companies in labels_with_companies.items():
+            list_of_companies = all_companies.split(',')
+            for company in list_of_companies:
+                if company_name.find(company.strip()) >= 0:
+                    return color
+        return None

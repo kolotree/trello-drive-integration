@@ -15,6 +15,7 @@ class TrelloCardWriter:
         card_description = '{0} - ID: {1}'.format(company.name, company.id)
         card = self.trelloClientWrapper.add_or_update_card(card_name, card_description)
         self.assign_member_to_card(card[1])
+        self.add_label_to_card(card[1])
         return card[0]
 
     def assign_member_to_card(self, card):
@@ -32,3 +33,16 @@ class TrelloCardWriter:
 
     def get_member_by_card_name(self, card_name):
         return Configuration().get_assigned_user_for_company(card_name)
+
+    def add_label_to_card(self, card):
+        if (card == None):
+            return
+        color = self.get_color_by_card_name(card.name)
+        if (color != None):
+            card.client.fetch_json(
+                '/cards/' + card.id + '/labels',
+                http_method='POST',
+                query_params={'value': color})
+
+    def get_color_by_card_name(self, card_name):
+        return Configuration().get_label_color_for_company(card_name)
