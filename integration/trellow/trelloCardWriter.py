@@ -1,7 +1,7 @@
 from integration.myLogging.loggerFactory import LoggerFactory
 from integration.trellow.clientFactory import ClientFactory
 from integration.configuration.configuration import Configuration
-from trello import ResourceUnavailable
+from trello.exceptions import ResourceUnavailable
 
 
 class TrelloCardWriter:
