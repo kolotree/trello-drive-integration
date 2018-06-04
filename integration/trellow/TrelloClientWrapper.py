@@ -1,4 +1,5 @@
-
+from datetime import timedelta
+from datetime import datetime
 from trello.trelloclient import TrelloClient
 from integration.configuration.configuration import Configuration
 from integration.myLogging.loggerFactory import LoggerFactory
@@ -8,7 +9,7 @@ class TrelloClientWrapper(TrelloClient):
     def __init__(self, api_key, api_secret=None, token=None, token_secret=None, board=None, list=None):
         super(TrelloClientWrapper, self).__init__(api_key, api_secret, token, token_secret)
 
-        configuration = Configuration()
+        self.configuration = Configuration()
         self.myLogger = LoggerFactory().getLoggerInstance()
 
         if board == None :
@@ -26,7 +27,7 @@ class TrelloClientWrapper(TrelloClient):
             self.myLogger.log_info('Card cannot be added because board and/or list ID is not defined')
             return None
 
-        return self.list.add_card(name=name, desc=description)
+        return self.list.add_card(name=name, desc=description, due=self.calculate_due_date())
 
     # deprecated
     def add_card_conditionaly(self, name, description):
@@ -79,3 +80,6 @@ class TrelloClientWrapper(TrelloClient):
 
     def set_current_list(self, list):
         self.list = list
+		
+    def calculate_due_date(self):
+        return str(datetime.utcnow() + timedelta(days=self.configuration.get_due_days_from_now()))

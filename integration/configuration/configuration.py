@@ -107,3 +107,6 @@ class Configuration():
                 if company_name.find(company.strip()) >= 0:
                     return color
         return None
+		
+    def get_due_days_from_now(self):
+        return int(self.read_property('TRELLO_CARD', 'due_days_from_now'))
