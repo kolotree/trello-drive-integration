@@ -2,7 +2,7 @@ import httplib2
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
 from oauth2client import tools
-from apiclient.discovery import build
+from googleapiclient.discovery import build
 
 
 class ServiceProvider:

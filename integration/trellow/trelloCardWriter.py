@@ -39,10 +39,16 @@ class TrelloCardWriter:
             return
         color = self.get_color_by_card_name(card.name)
         if (color != None):
-            card.client.fetch_json(
+            existingColors = card.client.fetch_json(
                 '/cards/' + card.id + '/labels',
-                http_method='POST',
-                query_params={'value': color})
+                http_method='GET')
+            matchingColor = [existingColor for existingColor in existingColors if existingColor['color'] == color]
+            if (matchingColor == []):
+                print('ne postoji boja')
+                card.client.fetch_json(
+                    '/cards/' + card.id + '/labels',
+                    http_method='POST',
+                    query_params={'value': color})
 
     def get_color_by_card_name(self, card_name):
         return Configuration().get_label_color_for_company(card_name)
