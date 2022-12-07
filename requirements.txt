@@ -1,6 +1,6 @@
 apiclient==1.0.3
 astroid==1.5.3
-certifi==2017.4.17
+certifi==2022.12.7
 chardet==3.0.4
 colorama==0.3.9
 			  
